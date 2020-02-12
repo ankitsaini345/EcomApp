@@ -8,17 +8,13 @@ import { NgForm } from "@angular/forms";
 })
 export class LoginComponent implements OnInit {
   customer = {
-    fName: "",
-    lName: "",
     email: "",
-    mobile: "",
-    pass: "",
-    cPass: ""
+    pass: ""
   };
   constructor() {}
 
   ngOnInit() {}
-  save(signUpForm: NgForm) {
-    console.log(signUpForm.form);
+  save(loginForm: NgForm) {
+    console.log(loginForm.form);
   }
 }

@@ -1,64 +1,12 @@
 <div class="card">
 	<div class="card-header">
-		Sign Up
+		Log In
 	</div>
 
 	<div class="card-body">
 		<form novalidate
-          (ngSubmit)="save(signupForm)"
-          #signupForm="ngForm"> 
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
-          First Name
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "fName"
-            type="text"
-            placeholder="First Name (Required)"
-            required
-            minlength="3"
-            name="firstName"
-            [(ngModel)] = customer.fName
-            #firstNameVar="ngModel"
-                 [ngClass]="{'is-invalid': (firstNameVar.touched || firstNameVar.dirty) && !firstNameVar.valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="firstNameVar.errors?.required">
-              Please enter your first name.
-            </span>
-					<span *ngIf="firstNameVar.errors?.minlength">
-              The first name must be longer than 3 characters.
-            </span>
-					</span>
-				</div>
-			</div>
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
-          Last Name
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "lName"
-            type="text"
-            placeholder="Last Name (Required)"
-            required
-            minlength="3"
-            name="lastName"
-            [(ngModel)] = customer.lName
-            #lastNameVar="ngModel"
-                 [ngClass]="{'is-invalid': (lastNameVar.touched || lastNameVar.dirty) && !lastNameVar.valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="lastNameVar.errors?.required">
-              Please enter your last name.
-            </span>
-					<span *ngIf="lastNameVar.errors?.minlength">
-              The Last name must be longer than 3 characters.
-            </span>
-					</span>
-				</div>
-			</div>
+          (ngSubmit)="save(loginForm)"
+          #loginForm="ngForm">
 			<div class="form-group row mb-2">
 				<label class="col-form-label col-md-3">
           Email
@@ -88,32 +36,6 @@
 
 			<div class="form-group row mb-2">
 				<label class="col-form-label col-md-3">
-          Mobile Number
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "id_mobile"
-            type="number"
-            placeholder="Mobile Number (Required)"
-            required
-            minlength="10"
-            name="mobile"
-            [(ngModel)] = customer.mobile
-            #mobileVar="ngModel"
-                 [ngClass]="{'is-invalid': (mobileVar.touched || mobileVar.dirty) && !mobileVar.valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="mobileVar.errors?.required">
-              Please enter your mobile name.
-            </span>
-					<span *ngIf="mobileVar.errors?.minlength">
-              Mobile Number must be of 10 characters.
-            </span>
-					</span>
-				</div>
-			</div>
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
           Password
         </label>
 				<div class="col-md-8">
@@ -138,40 +60,14 @@
 					</span>
 				</div>
 			</div>
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
-          Confirm Password
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "cpassword"
-            type="password"
-            placeholder="Confirm Password (Required)"
-            required
-            minlength="5"
-            name="cpswd"
-            [(ngModel)] = customer.cPass
-            #cPasswordVar="ngModel"
-                 [ngClass]="{'is-invalid': (cPasswordVar.touched || cPasswordVar.dirty) && !cPasswordVar.valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="cPasswordVar.errors?.required">
-              Please enter Confirm Password.
-            </span>
-					<!-- <span *ngIf="cPasswordVar.errors?.minlength">
-              The first name must be longer than 3 characters.
-            </span> -->
-					</span>
-				</div>
-			</div>
       <div class="form-group row mb-2">
         <div class="offset-md-3 col-md-4">
           <button class="btn btn-primary mr-3"
                   type="submit"
                   style="width:80px"
-                  [title]="signupForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
-                  [disabled]="!signupForm.valid">
-            Save
+                  [title]="loginForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
+                  [disabled]="!loginForm.valid">
+            Login
           </button>
         </div>
       </div>
@@ -180,4 +76,4 @@
 </div>
 
 <br>
-{{signupForm.value | json}}
+{{loginForm.value | json}}
