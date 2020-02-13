@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SignupComponent } from './signup/signup.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -11,7 +11,7 @@ import { SignupComponent } from './signup/signup.component';
   declarations: [LoginComponent, SignupComponent],
   imports: [
     CommonModule,
-    FormsModule,
+    SharedModule,
     RouterModule.forChild([
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignupComponent }

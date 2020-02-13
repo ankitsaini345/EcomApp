@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, observable } from 'rxjs';
 import { IProduct } from './product';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,5 +16,12 @@ export class GetProductService {
         tap(data => console.log(data))
       );
     ;
+  }
+
+  getProduct(id: number): Observable<IProduct | undefined> {
+    return this.getProducts()
+    .pipe(
+      map((products: IProduct[]) => products.find(p => p.productId === id))
+    );
   }
 }

@@ -9,8 +9,14 @@
                     Filter by:
                 </label></div>
             <div>
-                <!-- <input [(ngmodel)]="filterBy" type="text" class="form-control"> -->
+                <input [(ngModel)] = filterBy type="text" class="form-control">
             </div>
+        </div>
+        <div class="row" *ngIf="filterBy">
+            <div class="col-md-6">
+                <label class="col-form-label">
+                    Showing products containing <b>{{filterBy}}</b>
+                </label></div>
         </div>
         <br>
         <div class="table-responsive">
@@ -26,18 +32,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let product of products">
-                        <td><img 
-                            [src]="product.imageUrl" 
-                            [title]="product.productName"
+                    <tr *ngFor="let product of filteredProduct">
+                        <td><img [src]="product.imageUrl" 
+                            [title]="product.productName" 
                             [style.width.px]="imageWidth"
-                            [style.margin.px]="imageMargin"
-                            ></td>
-                        <td>{{product.productName}}</td>
+                            [style.margin.px]="imageMargin"></td>
+                        <td><a 
+                            [routerLink] = "['/product', product.productId]" >
+                            {{product.productName}}
+                                               </a></td>
                         <td>{{product.productCode}}</td>
                         <td>{{product.releaseDate}}</td>
                         <td>{{product.price}}</td>
-                        <td>{{product.starRating}}</td>
+                        <td><app-star [rating]="product.starRating"></app-star></td>
                     </tr>
                 </tbody>
             </table>
