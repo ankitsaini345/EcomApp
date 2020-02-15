@@ -31,14 +31,14 @@ export class ProductListComponent implements OnInit {
       this.products = data;
       this.filteredProduct = data;
     });
-    
-    
+
+
   }
 
   performFilter(val: string) {
     val = val.toLocaleLowerCase();
-    return this.products.filter((product : IProduct) =>
-    product.productName.toLocaleLowerCase().indexOf(val) != -1);
+    return this.products.filter((product: IProduct) =>
+      product.productName.toLocaleLowerCase().indexOf(val) != -1);
   }
 
 }

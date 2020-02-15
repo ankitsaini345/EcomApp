@@ -13,11 +13,11 @@ export class ProductDetailComponent implements OnInit {
   product: IProduct | undefined;
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private productService: GetProductService ) { }
+              private productService: GetProductService) { }
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.productService.getProduct(id).subscribe((product: IProduct)=> this.product = product);
+    this.productService.getProduct(id).subscribe((product: IProduct) => this.product = product);
   }
   onBack(): void {
     this.router.navigate(['/products']);
