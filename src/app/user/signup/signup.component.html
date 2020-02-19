@@ -5,8 +5,8 @@
 
 	<div class="card-body">
 		<form novalidate
-          (ngSubmit)="save(signupForm)"
-          #signupForm="ngForm"> 
+          (ngSubmit)="save()"
+          [formGroup]="signUpForm"> 
 			<div class="form-group row mb-2">
 				<label class="col-form-label col-md-3">
           First Name
@@ -16,18 +16,14 @@
             id = "fName"
             type="text"
             placeholder="First Name (Required)"
-            required
-            minlength="3"
-            name="firstName"
-            [(ngModel)] = customer.fName
-            #firstNameVar="ngModel"
-                 [ngClass]="{'is-invalid': (firstNameVar.touched || firstNameVar.dirty) && !firstNameVar.valid }"
+            formControlName="firstName"
+                 [ngClass]="{'is-invalid': (signUpForm.get('firstName').touched || signUpForm.get('firstName').dirty) && !signUpForm.get('firstName').valid }"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="firstNameVar.errors?.required">
+            <span *ngIf="signUpForm.get('firstName').errors?.required">
               Please enter your first name.
             </span>
-					<span *ngIf="firstNameVar.errors?.minlength">
+					<span *ngIf="signUpForm.get('firstName').errors?.minlength">
               The first name must be longer than 3 characters.
             </span>
 					</span>
@@ -42,18 +38,14 @@
             id = "lName"
             type="text"
             placeholder="Last Name (Required)"
-            required
-            minlength="3"
-            name="lastName"
-            [(ngModel)] = customer.lName
-            #lastNameVar="ngModel"
-                 [ngClass]="{'is-invalid': (lastNameVar.touched || lastNameVar.dirty) && !lastNameVar.valid }"
+            formControlName='lastName'
+                 [ngClass]="{'is-invalid': (signUpForm.get('lastName').touched || signUpForm.get('lastName').dirty) && !signUpForm.get('lastName').valid }"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="lastNameVar.errors?.required">
+            <span *ngIf="signUpForm.get('lastName').errors?.required">
               Please enter your last name.
             </span>
-					<span *ngIf="lastNameVar.errors?.minlength">
+					<span *ngIf="signUpForm.get('lastName').errors?.minlength">
               The Last name must be longer than 3 characters.
             </span>
 					</span>
@@ -68,18 +60,14 @@
             id = "emailid"
             type="email"
             placeholder="Email (Required)"
-            required
-            minlength="3"
-            name="email"
-            [(ngModel)] = customer.email
-            #emailVar = "ngModel"
-            [ngClass]= "{'is-invalid': (emailVar.touched || emailVar.dirty) && !emailVar.valid}"
+            formControlName='email'
+            [ngClass]= "{'is-invalid': (signUpForm.get('email').touched || signUpForm.get('email').dirty) && !signUpForm.get('email').valid}"
           >
 					<span class="invalid-feedback">
-          <span *ngIf="emailVar.errors?.required">
+          <span *ngIf="signUpForm.get('email').errors?.required">
             Please enter your email address.
           </span>
-					<span *ngIf="emailVar.errors?.email">
+					<span *ngIf="signUpForm.get('email').errors?.email">
             Please enter a valid email address.
           </span>
 					</span>
@@ -95,18 +83,14 @@
             id = "id_mobile"
             type="number"
             placeholder="Mobile Number (Required)"
-            required
-            minlength="10"
-            name="mobile"
-            [(ngModel)] = customer.mobile
-            #mobileVar="ngModel"
-                 [ngClass]="{'is-invalid': (mobileVar.touched || mobileVar.dirty) && !mobileVar.valid }"
+            formControlName='mobile'
+                 [ngClass]="{'is-invalid': (signUpForm.get('mobile').touched || signUpForm.get('mobile').dirty) && !signUpForm.get('mobile').valid }"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="mobileVar.errors?.required">
+            <span *ngIf="signUpForm.get('mobile').errors?.required">
               Please enter your mobile name.
             </span>
-					<span *ngIf="mobileVar.errors?.minlength">
+					<span *ngIf="signUpForm.get('mobile').errors?.minlength">
               Mobile Number must be of 10 characters.
             </span>
 					</span>
@@ -121,18 +105,14 @@
             id = "pswd"
             type="password"
             placeholder="Password (Required)"
-            required
-            minlength="5"
-            name="password"
-            [(ngModel)] = customer.pass
-            #passwordVar="ngModel"
-                 [ngClass]="{'is-invalid': (passwordVar.touched || passwordVar.dirty) && !passwordVar.valid }"
+            formControlName='password'
+                 [ngClass]="{'is-invalid': (signUpForm.get('password').touched || signUpForm.get('password').dirty) && !signUpForm.get('password').valid }"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="passwordVar.errors?.required">
+            <span *ngIf="signUpForm.get('password').errors?.required">
               Please enter Password.
             </span>
-					<span *ngIf="passwordVar.errors?.minlength">
+					<span *ngIf="signUpForm.get('password').errors?.minlength">
               The Password must be longer than 5 characters.
             </span>
 					</span>
@@ -147,18 +127,14 @@
             id = "cpassword"
             type="password"
             placeholder="Confirm Password (Required)"
-            required
-            minlength="5"
-            name="cpswd"
-            [(ngModel)] = customer.cPass
-            #cPasswordVar="ngModel"
-                 [ngClass]="{'is-invalid': (cPasswordVar.touched || cPasswordVar.dirty) && !cPasswordVar.valid }"
+            formControlName='cPassword'
+                 [ngClass]="{'is-invalid': (signUpForm.get('cPassword').touched || signUpForm.get('cPassword').dirty) && !signUpForm.get('cPassword').valid }"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="cPasswordVar.errors?.required">
+            <span *ngIf="signUpForm.get('cPassword').errors?.required">
               Please enter Confirm Password.
             </span>
-					<!-- <span *ngIf="cPasswordVar.errors?.minlength">
+					<!-- <span *ngIf="signUpForm.get('cPassword').errors?.minlength">
               The first name must be longer than 3 characters.
             </span> -->
 					</span>
@@ -169,8 +145,8 @@
           <button class="btn btn-primary mr-3"
                   type="submit"
                   style="width:80px"
-                  [title]="signupForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
-                  [disabled]="!signupForm.valid">
+                  [title]="signUpForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
+                  [disabled]="!signUpForm.valid">
             Save
           </button>
         </div>
@@ -180,4 +156,5 @@
 </div>
 
 <br>
-{{signupForm.value | json}}
+{{signUpForm.value | json}}
+{{signUpForm.get('email').touched}}

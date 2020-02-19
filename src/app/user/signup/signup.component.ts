@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-signup',
@@ -7,19 +8,32 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  customer = {
-    fName: "",
-    lName: "",
-    email: "",
-    mobile: "",
-    pass: "",
-    cPass: ""
-  };
+  signUpForm: FormGroup;  //Root Form group
+
+  firstName= ''
+  lastName = ''
+  email = ''
+  mobile = ''
+  password = ''
+  cPassword = ''
+
   constructor() { }
 
   ngOnInit() {
+    this.signUpForm = new FormGroup({
+      firstName: new FormControl(),
+      lastName : new FormControl(),
+      email : new FormControl(),
+      mobile : new FormControl(),
+      password : new FormControl(),
+      cPassword : new FormControl()
+    });
+    this.signUpForm.patchValue({
+      firstName : 'testName'
+    });
   }
-  save(signUpForm: NgForm) {
-    console.log(signUpForm.form);
+  save() {
+    console.log(this.signUpForm.value);
   }
+  
 }
