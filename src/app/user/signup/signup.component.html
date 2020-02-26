@@ -24,7 +24,7 @@
               Please enter your first name.
             </span>
 					<span *ngIf="signUpForm.get('firstName').errors?.minlength">
-              The first name must be longer than 3 characters.
+              The first name must be longer than 5 characters.
             </span>
 					</span>
 				</div>
@@ -81,65 +81,94 @@
 				<div class="col-md-8">
 					<input class="form-control"
             id = "id_mobile"
-            type="number"
+            type="text"
             placeholder="Mobile Number (Required)"
             formControlName='mobile'
                  [ngClass]="{'is-invalid': (signUpForm.get('mobile').touched || signUpForm.get('mobile').dirty) && !signUpForm.get('mobile').valid }"
           >
 					<span class="invalid-feedback">
             <span *ngIf="signUpForm.get('mobile').errors?.required">
-              Please enter your mobile name.
+              Please enter your mobile number.
             </span>
-					<span *ngIf="signUpForm.get('mobile').errors?.minlength">
-              Mobile Number must be of 10 characters.
+					<span *ngIf="signUpForm.get('mobile').errors?.length">
+              Mobile Number must be of 10 Digits.
             </span>
-					</span>
-				</div>
-			</div>
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
-          Password
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "pswd"
-            type="password"
-            placeholder="Password (Required)"
-            formControlName='password'
-                 [ngClass]="{'is-invalid': (signUpForm.get('password').touched || signUpForm.get('password').dirty) && !signUpForm.get('password').valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="signUpForm.get('password').errors?.required">
-              Please enter Password.
-            </span>
-					<span *ngIf="signUpForm.get('password').errors?.minlength">
-              The Password must be longer than 5 characters.
+            <span *ngIf="signUpForm.get('mobile').errors?.pattern">
+             Only digits allowed in Mobile Number.
             </span>
 					</span>
 				</div>
 			</div>
-			<div class="form-group row mb-2">
-				<label class="col-form-label col-md-3">
-          Confirm Password
-        </label>
-				<div class="col-md-8">
-					<input class="form-control"
-            id = "cpassword"
-            type="password"
-            placeholder="Confirm Password (Required)"
-            formControlName='cPassword'
-                 [ngClass]="{'is-invalid': (signUpForm.get('cPassword').touched || signUpForm.get('cPassword').dirty) && !signUpForm.get('cPassword').valid }"
-          >
-					<span class="invalid-feedback">
-            <span *ngIf="signUpForm.get('cPassword').errors?.required">
-              Please enter Confirm Password.
-            </span>
-					<!-- <span *ngIf="signUpForm.get('cPassword').errors?.minlength">
-              The first name must be longer than 3 characters.
-            </span> -->
-					</span>
-				</div>
-			</div>
+<div formGroupName="paswrdGroup">
+  <div class="form-group row mb-2">
+    <label class="col-form-label col-md-3">
+      Password
+    </label>
+    <div class="col-md-8">
+      <input class="form-control"
+        id = "pswd"
+        type="password"
+        placeholder="Password (Required)"
+        formControlName='password'
+             [ngClass]="{'is-invalid': (signUpForm.get('paswrdGroup.password').touched || signUpForm.get('paswrdGroup.password').dirty) && !signUpForm.get('paswrdGroup.password').valid }"
+      >
+      <span class="invalid-feedback">
+        <span *ngIf="signUpForm.get('paswrdGroup.password').errors?.required">
+          Please enter Password.
+        </span>
+      <span *ngIf="signUpForm.get('paswrdGroup.password').errors?.minlength">
+          The Password must be longer than 5 characters.
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <label class="col-form-label col-md-3">
+      Confirm Password
+    </label>
+    <div class="col-md-8">
+      <input class="form-control"
+        id = "cpassword"
+        type="password"
+        placeholder="Confirm Password (Required)"
+        formControlName='cPassword'
+             [ngClass]="{'is-invalid': (signUpForm.get('paswrdGroup.cPassword').touched || signUpForm.get('paswrdGroup.cPassword').dirty) && !signUpForm.get('paswrdGroup').valid }"
+      >
+      <span class="invalid-feedback">
+        <span *ngIf="signUpForm.get('paswrdGroup.cPassword').errors?.required">
+          Please enter Confirm Password.
+        </span>
+        <span *ngIf="signUpForm.get('paswrdGroup').errors?.match">
+          Password does not match.
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+      
+      <div class="form-group row mb-2">
+        <label class="col-md-3 col-form-label pt-0">Send Notifications</label>
+        <div class="col-md-8">
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="radio"
+                     value="email"
+                     (click)="setNotifyVia('email')"
+                     formControlName="notification">Email
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="radio"
+                     value="text"
+                     (click)="setNotifyVia('text')"
+                     formControlName="notification">Text
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="form-group row mb-2">
         <div class="offset-md-3 col-md-4">
           <button class="btn btn-primary mr-3"
