@@ -17,15 +17,10 @@
             type="text"
             placeholder="First Name (Required)"
             formControlName="firstName"
-                 [ngClass]="{'is-invalid': (signUpForm.get('firstName').touched || signUpForm.get('firstName').dirty) && !signUpForm.get('firstName').valid }"
+                 [ngClass]="{'is-invalid': nameMessage}"
           >
 					<span class="invalid-feedback">
-            <span *ngIf="signUpForm.get('firstName').errors?.required">
-              Please enter your first name.
-            </span>
-					<span *ngIf="signUpForm.get('firstName').errors?.minlength">
-              The first name must be longer than 5 characters.
-            </span>
+            {{nameMessage}}
 					</span>
 				</div>
 			</div>
@@ -154,7 +149,6 @@
               <input class="form-check-input"
                      type="radio"
                      value="email"
-                     (click)="setNotifyVia('email')"
                      formControlName="notification">Email
             </label>
           </div>
@@ -163,7 +157,6 @@
               <input class="form-check-input"
                      type="radio"
                      value="text"
-                     (click)="setNotifyVia('text')"
                      formControlName="notification">Text
             </label>
           </div>
