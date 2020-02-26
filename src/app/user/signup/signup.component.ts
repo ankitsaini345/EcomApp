@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 function checkLength(val: number): ValidatorFn {
@@ -35,6 +35,10 @@ export class SignupComponent implements OnInit {
       minlength: 'The first name must be longer than 5 characters.'
     }
   }
+  get addresses(): FormArray {
+    return this.signUpForm.get('addresses') as FormArray;
+  }
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -50,7 +54,9 @@ export class SignupComponent implements OnInit {
       },
         { validator: PaswdMatch }
       ),
-      notification: 'email'
+      notification: 'email',
+      sendCatalog: true,
+      addresses: this.fb.array([this.buildAddress()])
     });
 
     //Watch for changes
@@ -77,6 +83,20 @@ export class SignupComponent implements OnInit {
     // this.signUpForm.patchValue({
     //   firstName: 'testName'
     // });
+  }
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street1: ['', Validators.required],
+      street2: '',
+      city: '',
+      state: '',
+      zip: ''
+    });
   }
   setNameMsg(c: AbstractControl): void {
     this.nameMessage = '';
