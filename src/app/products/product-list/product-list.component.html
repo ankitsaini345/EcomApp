@@ -9,7 +9,7 @@
                     Filter by:
                 </label></div>
             <div>
-                <input [(ngModel)] = filterBy type="text" class="form-control">
+                <input [(ngModel)]=filterBy type="text" class="form-control">
             </div>
         </div>
         <div class="row" *ngIf="filterBy">
@@ -29,22 +29,24 @@
                         <th>Available</th>
                         <th>Price</th>
                         <th>Rating</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let product of filteredProduct">
-                        <td><img [src]="product.imageUrl" 
-                            [title]="product.productName" 
-                            [style.width.px]="imageWidth"
-                            [style.margin.px]="imageMargin"></td>
-                        <td><a 
-                            [routerLink] = "['/product', product.productId]" >
-                            {{product.productName}}
-                                               </a></td>
+                        <td><img [src]="product.imageUrl" [title]="product.productName" [style.width.px]="imageWidth"
+                                [style.margin.px]="imageMargin"></td>
+                        <td><a [routerLink]="['/product', product.id]">
+                                {{product.productName}}
+                            </a></td>
                         <td>{{product.productCode}}</td>
                         <td>{{product.releaseDate}}</td>
                         <td>{{product.price}}</td>
-                        <td><app-star [rating]="product.starRating"></app-star></td>
+                        <td>
+                            <app-star [rating]="product.starRating"></app-star>
+                        </td>
+                        <td><button class="btn btn-outline-primary btn-sm"
+                                [routerLink]="['/product',product.id,'edit']">Edit</button> </td>
                     </tr>
                 </tbody>
             </table>
