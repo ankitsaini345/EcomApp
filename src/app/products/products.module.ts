@@ -20,7 +20,7 @@ import { ProductEditGuard } from './product-edit/product-edit.guard';
     RouterModule.forChild([
       { path: 'products', component: ProductListComponent },
       { path: 'product/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent },
-      { path: 'product/:id/edit',canActivate: [ProductEditGuard], component: ProductEditComponent }
+      { path: 'product/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent }
     ])
   ],
   exports: [
