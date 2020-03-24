@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-login",
@@ -8,13 +10,17 @@ import { NgForm } from "@angular/forms";
 })
 export class LoginComponent implements OnInit {
   customer = {
-    email: "",
-    pass: ""
+    email: '',
+    pass: ''
   };
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
   save(loginForm: NgForm) {
-    console.log(loginForm.form);
+    this.authService.login(loginForm.form.value.email, loginForm.form.value.password);
+    if (this.authService.isLoggedIn) {
+        this.router.navigate(['/products']);
+    }
   }
 }

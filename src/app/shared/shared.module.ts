@@ -4,18 +4,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import { StarComponent } from './star/star.component';
+import { AlertComponent } from './alert/alert.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [StarComponent],
+  declarations: [StarComponent, AlertComponent],
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule.forChild([
+      {path: 'alert', component: AlertComponent, outlet: 'popup'}
+    ])
   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
-    StarComponent
+    StarComponent,
+    AlertComponent
   ]
 })
 export class SharedModule { }
