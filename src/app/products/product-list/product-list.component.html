@@ -36,7 +36,8 @@
                     <tr *ngFor="let product of filteredProduct">
                         <td><img [src]="product.imageUrl" [title]="product.productName" [style.width.px]="imageWidth"
                                 [style.margin.px]="imageMargin"></td>
-                        <td><a [routerLink]="['/product', product.id]">
+                        <td><a [routerLink]="['/products', product.id]"
+                                [queryParams]="{filterBy:filterBy}">
                                 {{product.productName}}
                             </a></td>
                         <td>{{product.productCode}}</td>
@@ -46,7 +47,7 @@
                             <app-star [rating]="product.starRating"></app-star>
                         </td>
                         <td><button class="btn btn-outline-primary btn-sm"
-                                [routerLink]="['/product',product.id,'edit']">Edit</button> </td>
+                                [routerLink]="['/products',product.id,'edit']">Edit</button> </td>
                     </tr>
                 </tbody>
             </table>

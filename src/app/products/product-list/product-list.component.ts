@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from '../product';
 import { GetProductService } from '../get-product.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -24,21 +25,20 @@ export class ProductListComponent implements OnInit {
     this.filteredProduct = this._filterBy ? this.performFilter(this._filterBy) : this.products;
   }
 
-  constructor(private productService: GetProductService) { }
+  constructor(private productService: GetProductService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.productService.getProducts().subscribe(data => {
       this.products = data;
       this.filteredProduct = data;
+      this.filterBy = this.route.snapshot.queryParamMap.get('filterBy') || '';
     });
-
-
   }
 
   performFilter(val: string) {
     val = val.toLocaleLowerCase();
     return this.products.filter((product: IProduct) =>
-      product.productName.toLocaleLowerCase().indexOf(val) != -1);
+      product.productName.toLocaleLowerCase().indexOf(val) !== -1);
   }
 
 }

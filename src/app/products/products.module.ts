@@ -19,8 +19,8 @@ import { ProductEditGuard } from './product-edit/product-edit.guard';
     InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
       { path: 'products', component: ProductListComponent },
-      { path: 'product/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent },
-      { path: 'product/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent }
+      { path: 'products/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent },
+      { path: 'products/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent }
     ])
   ],
   exports: [
