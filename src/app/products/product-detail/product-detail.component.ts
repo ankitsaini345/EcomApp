@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IProduct } from '../product';
+import { IProduct, IProductResolver } from '../product';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetProductService } from '../get-product.service';
 
@@ -11,16 +11,14 @@ import { GetProductService } from '../get-product.service';
 export class ProductDetailComponent implements OnInit {
 
   product: IProduct | undefined;
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private productService: GetProductService) { }
+  errorMessage: string;
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.productService.getProduct(id).subscribe((product: IProduct) => this.product = product);
+    // const id = +this.route.snapshot.paramMap.get('id');
+    // this.productService.getProduct(id).subscribe((product: IProduct) => this.product = product);
+    const productData: IProductResolver = this.route.snapshot.data.productData;
+    this.errorMessage = productData.error;
+    this.product = productData.product;
   }
-  onBack(): void {
-    this.router.navigate(['/products']);
-  }
-
 }

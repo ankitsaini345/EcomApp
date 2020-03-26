@@ -28,11 +28,14 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: GetProductService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.productService.getProducts().subscribe(data => {
-      this.products = data;
-      this.filteredProduct = data;
-      this.filterBy = this.route.snapshot.queryParamMap.get('filterBy') || '';
-    });
+    // this.productService.getProducts().subscribe(data => {
+    //   this.products = data;
+    //   this.filteredProduct = data;
+    //   this.filterBy = this.route.snapshot.queryParamMap.get('filterBy') || '';
+    // });
+    this.products = this.route.snapshot.data.productList;
+    this.filteredProduct = this.route.snapshot.data.productList;
+    this.filterBy = this.route.snapshot.queryParamMap.get('filterBy') || '';
   }
 
   performFilter(val: string) {

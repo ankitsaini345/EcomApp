@@ -13,27 +13,26 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.css']
 })
-export class ProductEditComponent implements OnInit, OnDestroy, AfterViewInit {
-  
+export class ProductEditComponent implements OnInit, AfterViewInit {
+
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
   productForm: FormGroup;
-  private sub: Subscription;
   product: IProduct;
   errorMessage: string;
   pageTitle = 'Product Edit';
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
-  
+
   get tags(): FormArray {
     return this.productForm.get('tags') as FormArray;
   }
 
-  constructor(private route: ActivatedRoute, 
-              private fb: FormBuilder, 
+  constructor(private route: ActivatedRoute,
+              private fb: FormBuilder,
               private productService: GetProductService,
-              private router:Router) { 
+              private router: Router) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -66,16 +65,7 @@ export class ProductEditComponent implements OnInit, OnDestroy, AfterViewInit {
       tags: this.fb.array([]),
       description: ''
     });
-
-    this.sub = this.route.paramMap.subscribe(
-      param => {
-        const id = +param.get('id');
-        this.getProduct(id);
-      }
-    )
-  }
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.displayProduct(this.route.snapshot.data.productData.product);
   }
 
   ngAfterViewInit(): void {
@@ -102,14 +92,6 @@ export class ProductEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tags.markAsDirty();
   }
 
-  getProduct(id: number): void {
-    this.productService.getProduct(id)
-      .subscribe({
-        next: (product: IProduct) => this.displayProduct(product),
-        error: err => this.errorMessage = err
-      });
-  }
-  
   displayProduct(product: IProduct): void {
     if (this.productForm) {
       this.productForm.reset();

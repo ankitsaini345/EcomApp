@@ -10,6 +10,8 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductDetailGuard } from './product-detail/product-detail.guard';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductEditGuard } from './product-edit/product-edit.guard';
+import { ProductResolverService } from './product-resolver.service';
+import { ProductListResolverService } from './product-list/product-list-resolver.service';
 
 @NgModule({
   declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent],
@@ -18,9 +20,15 @@ import { ProductEditGuard } from './product-edit/product-edit.guard';
     SharedModule,
     InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent },
-      { path: 'products/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent },
-      { path: 'products/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent }
+      { path: 'products', component: ProductListComponent, resolve: {productList: ProductListResolverService} },
+      {
+        path: 'products/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent,
+        resolve: { productData: ProductResolverService }
+      },
+      {
+        path: 'products/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent,
+        resolve: { productData: ProductResolverService }
+      }
     ])
   ],
   exports: [
