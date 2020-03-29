@@ -12,22 +12,29 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductEditGuard } from './product-edit/product-edit.guard';
 import { ProductResolverService } from './product-resolver.service';
 import { ProductListResolverService } from './product-list/product-list-resolver.service';
+import { ProductEditInfoComponent } from './product-edit-info/product-edit-info.component';
+import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.component';
 
 @NgModule({
-  declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent],
+  declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent],
   imports: [
     CommonModule,
     SharedModule,
     InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent, resolve: {productList: ProductListResolverService} },
+      { path: 'products', component: ProductListComponent, resolve: { productList: ProductListResolverService } },
       {
         path: 'products/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent,
         resolve: { productData: ProductResolverService }
       },
       {
         path: 'products/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent,
-        resolve: { productData: ProductResolverService }
+        resolve: { productData: ProductResolverService },
+        children: [
+          { path: '', redirectTo: 'info', pathMatch: 'full' },
+          { path: 'info', component: ProductEditInfoComponent },
+          { path: 'tags', component: ProductEditTagComponent }
+        ]
       }
     ])
   ],

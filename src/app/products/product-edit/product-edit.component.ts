@@ -1,158 +1,136 @@
-import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { IProduct, IProductResolver } from '../product';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControlName, FormArray, FormControl } from '@angular/forms';
-import { NumberValidators } from 'src/app/shared/validators/number-validator';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { GetProductService } from '../get-product.service';
-import { IProduct } from '../product';
-import { GenericValidator } from 'src/app/shared/validators/generic-validator';
-import { debounceTime } from 'rxjs/operators';
+import { AlertService } from 'src/app/shared/alert/alert.service';
 
 @Component({
   selector: 'app-product-edit',
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.css']
 })
-export class ProductEditComponent implements OnInit, AfterViewInit {
+export class ProductEditComponent implements OnInit {
 
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
-
-  productForm: FormGroup;
-  product: IProduct;
-  errorMessage: string;
   pageTitle = 'Product Edit';
-  displayMessage: { [key: string]: string } = {};
-  private validationMessages: { [key: string]: { [key: string]: string } };
-  private genericValidator: GenericValidator;
+  errorMessage: string;
+  private dataIsValid: { [key: string]: boolean } = {};
+  private currentProduct: IProduct;
+  private originalProduct: IProduct;
 
-  get tags(): FormArray {
-    return this.productForm.get('tags') as FormArray;
+  get isDirty(): boolean {
+    return JSON.stringify(this.originalProduct) !== JSON.stringify(this.currentProduct);
+  }
+
+  get product(): IProduct {
+    return this.currentProduct;
+  }
+  set product(value: IProduct) {
+    this.currentProduct = value;
+    // Clone the object to retain a copy
+    this.originalProduct = value ? { ...value } : null;
   }
 
   constructor(private route: ActivatedRoute,
-              private fb: FormBuilder,
+              private router: Router,
               private productService: GetProductService,
-              private router: Router) {
-
-    // Defines all of the validation messages for the form.
-    // These could instead be retrieved from a file or database.
-    this.validationMessages = {
-      productName: {
-        required: 'Product name is required.',
-        minlength: 'Product name must be at least three characters.',
-        maxlength: 'Product name cannot exceed 50 characters.'
-      },
-      productCode: {
-        required: 'Product code is required.'
-      },
-      starRating: {
-        range: 'Rate the product between 1 (lowest) and 5 (highest).'
-      }
-    };
-
-    // Define an instance of the validator for use with this form,
-    // passing in this form's set of validation messages.
-    this.genericValidator = new GenericValidator(this.validationMessages);
-  }
+              private alertService: AlertService) { }
 
   ngOnInit() {
-    this.productForm = this.fb.group({
-      productName: ['', [Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(50)]],
-      productCode: ['', Validators.required],
-      starRating: ['', NumberValidators.range(1, 5)],
-      tags: this.fb.array([]),
-      description: ''
-    });
-    this.displayProduct(this.route.snapshot.data.productData.product);
-  }
-
-  ngAfterViewInit(): void {
-    // Watch for the blur event from any input element on the form.
-    // This is required because the valueChanges does not provide notification on blur
-    const controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
-    merge(this.productForm.valueChanges, ...controlBlurs).pipe(
-      debounceTime(800)
-    ).subscribe(value => {
-      this.displayMessage = this.genericValidator.processMessages(this.productForm);
+    this.route.data.subscribe(data => {
+      const productData: IProductResolver = data.productData;
+      this.errorMessage = productData.error;
+      this.onProductRetrieved(productData.product);
     });
   }
 
-  addTag(): void {
-    this.tags.push(new FormControl());
-  }
-
-  deleteTag(index: number): void {
-    this.tags.removeAt(index);
-    this.tags.markAsDirty();
-  }
-
-  displayProduct(product: IProduct): void {
-    if (this.productForm) {
-      this.productForm.reset();
-    }
+  onProductRetrieved(product: IProduct): void {
     this.product = product;
-    if (this.product.id === 0) {
-      this.pageTitle = 'Add Product';
-    } else {
-      this.pageTitle = `Edit Product: ${this.product.productName}`;
-    }
-    // Update the data on the form
-    this.productForm.patchValue({
-      productName: this.product.productName,
-      productCode: this.product.productCode,
-      starRating: this.product.starRating,
-      description: this.product.description
-    });
-    //dnt knw
-    this.productForm.setControl('tags', this.fb.array(this.product.tags || []));
-  }
-  saveProduct(): void {
-    if (this.productForm.valid) {
-      if (this.productForm.dirty) {
-        const p = { ...this.product, ...this.productForm.value };
 
-        if (p.id === 0) {
-          this.productService.createProduct(p)
-            .subscribe({
-              next: () => this.onSaveComplete(),
-              error: err => this.errorMessage = err
-            });
-        } else {
-          this.productService.updateProduct(p)
-            .subscribe({
-              next: () => this.onSaveComplete(),
-              error: err => this.errorMessage = err
-            });
-        }
+    if (!this.product) {
+      this.pageTitle = 'No product found';
+    } else {
+      if (this.product.id === 0) {
+        this.pageTitle = 'Add Product';
       } else {
-        this.onSaveComplete();
+        this.pageTitle = `Edit Product: ${this.product.productName}`;
+      }
+    }
+  }
+
+  isValid(path?: string): boolean {
+    this.validate();
+    if (path) {
+      return this.dataIsValid[path];
+    }
+    return (this.dataIsValid &&
+      Object.keys(this.dataIsValid).every(d => this.dataIsValid[d] === true));
+  }
+
+  validate(): void {
+    // Clear the validation object
+    this.dataIsValid = {};
+
+    // 'info' tab
+    if (this.product.productName &&
+      this.product.productName.length >= 3 &&
+      this.product.productCode) {
+      this.dataIsValid.info = true;
+    } else {
+      this.dataIsValid.info = false;
+    }
+
+    // 'tags' tab
+    if (this.product.category &&
+      this.product.category.length >= 3) {
+      this.dataIsValid.tags = true;
+    } else {
+      this.dataIsValid.tags = false;
+    }
+  }
+
+  reset(): void {
+    this.dataIsValid = null;
+    this.currentProduct = null;
+    this.originalProduct = null;
+  }
+
+  saveProduct(): void {
+    if (this.isValid()) {
+      if (this.product.id === 0) {
+        this.productService.createProduct(this.product).subscribe({
+          next: () => this.onSaveComplete(`The new ${this.product.productName} was saved`),
+          error: err => this.errorMessage = err
+        });
+      } else {
+        this.productService.updateProduct(this.product).subscribe({
+          next: () => this.onSaveComplete(`The updated ${this.product.productName} was saved`),
+          error: err => this.errorMessage = err
+        });
       }
     } else {
       this.errorMessage = 'Please correct the validation errors.';
     }
   }
 
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.productForm.reset();
+  onSaveComplete(message?: string): void {
+    if (message) {
+      this.alertService.addAlert(message);
+    }
+    this.reset();
+
+    // Navigate back to the product list
     this.router.navigate(['/products']);
   }
 
   deleteProduct(): void {
     if (this.product.id === 0) {
       // Don't delete, it was never saved.
-      this.onSaveComplete();
+      this.onSaveComplete(`${this.product.productName} was deleted`);
     } else {
       if (confirm(`Really delete the product: ${this.product.productName}?`)) {
         this.productService.deleteProduct(this.product.id)
           .subscribe({
-            next: () => this.onSaveComplete(),
+            next: () => this.onSaveComplete(`${this.product.productName} was deleted`),
             error: err => this.errorMessage = err
           });
       }
