@@ -22,20 +22,31 @@ import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.com
     SharedModule,
     InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent, resolve: { productList: ProductListResolverService } },
       {
-        path: 'products/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent,
-        resolve: { productData: ProductResolverService }
-      },
-      {
-        path: 'products/:id/edit', canDeactivate: [ProductEditGuard], component: ProductEditComponent,
-        resolve: { productData: ProductResolverService },
+        path: 'products',
         children: [
-          { path: '', redirectTo: 'info', pathMatch: 'full' },
-          { path: 'info', component: ProductEditInfoComponent },
-          { path: 'tags', component: ProductEditTagComponent }
+          {
+            path: '', component: ProductListComponent,
+            resolve: { productList: ProductListResolverService }
+          },
+          {
+            path: ':id', canActivate: [ProductDetailGuard],
+            component: ProductDetailComponent,
+            resolve: { productData: ProductResolverService }
+          },
+          {
+            path: ':id/edit', canDeactivate: [ProductEditGuard],
+            component: ProductEditComponent,
+            resolve: { productData: ProductResolverService },
+            children: [
+              { path: '', redirectTo: 'info', pathMatch: 'full' },
+              { path: 'info', component: ProductEditInfoComponent },
+              { path: 'tags', component: ProductEditTagComponent }
+            ]
+          }
         ]
       }
+
     ])
   ],
   exports: [
