@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-
-import { ProductEditComponent } from './product-edit.component';
+import { AuthService } from 'src/app/user/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductEditGuard implements CanDeactivate<ProductEditComponent> {
-  canDeactivate(component: ProductEditComponent): Observable<boolean> | Promise<boolean> | boolean {
+export class ProductEditGuard implements CanActivate {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
-    return true;
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+      return true;
   }
 }

@@ -14,6 +14,7 @@ import { ProductResolverService } from './product-resolver.service';
 import { ProductListResolverService } from './product-list/product-list-resolver.service';
 import { ProductEditInfoComponent } from './product-edit-info/product-edit-info.component';
 import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.component';
+import { AuthGuard } from '../shared/auth.guard';
 
 @NgModule({
   declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent],
@@ -24,6 +25,7 @@ import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.com
     RouterModule.forChild([
       {
         path: 'products',
+        canActivate: [AuthGuard],
         children: [
           {
             path: '', component: ProductListComponent,
@@ -35,7 +37,7 @@ import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.com
             resolve: { productData: ProductResolverService }
           },
           {
-            path: ':id/edit', canDeactivate: [ProductEditGuard],
+            path: ':id/edit', canActivate: [ProductEditGuard],
             component: ProductEditComponent,
             resolve: { productData: ProductResolverService },
             children: [

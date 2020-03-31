@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   customer = {
@@ -20,7 +20,13 @@ export class LoginComponent implements OnInit {
   save(loginForm: NgForm) {
     this.authService.login(loginForm.form.value.email, loginForm.form.value.password);
     if (this.authService.isLoggedIn) {
+      const url = this.authService.redirectUrl;
+      this.authService.redirectUrl = '';
+      if (url) {
+        this.router.navigate([url]);
+      } else {
         this.router.navigate(['/products']);
+      }
     }
   }
 }
