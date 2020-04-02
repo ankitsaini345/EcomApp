@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { UserModule } from './user/user.module';
-import { ProductsModule } from './products/products.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from './shared/auth.guard';
 
 @NgModule({
   declarations: [
@@ -17,11 +16,14 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: 'home', component: AppComponent},
-      { path: '', redirectTo: 'home', pathMatch: 'full'},
-      { path: '**', redirectTo: 'home', pathMatch: 'full'}
+      { path: 'home', component: AppComponent },
+      {
+        path: 'products', canActivate: [AuthGuard],
+        loadChildren: './products/products.module#ProductsModule'
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]),
-    ProductsModule,
     UserModule
   ],
   providers: [],

@@ -24,10 +24,6 @@ import { AuthGuard } from '../shared/auth.guard';
     InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
       {
-        path: 'products',
-        canActivate: [AuthGuard],
-        children: [
-          {
             path: '', component: ProductListComponent,
             resolve: { productList: ProductListResolverService }
           },
@@ -45,10 +41,7 @@ import { AuthGuard } from '../shared/auth.guard';
               { path: 'info', component: ProductEditInfoComponent },
               { path: 'tags', component: ProductEditTagComponent }
             ]
-          }
-        ]
       }
-
     ])
   ],
   exports: [

@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StarComponent } from './star/star.component';
 import { AlertComponent } from './alert/alert.component';
 import { RouterModule } from '@angular/router';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ProductData } from '../products/product-data';
 
 @NgModule({
   declarations: [StarComponent, AlertComponent],
@@ -13,6 +15,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
       {path: 'alert', component: AlertComponent, outlet: 'popup'}
     ])
