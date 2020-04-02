@@ -19,7 +19,7 @@ import { AuthGuard } from './shared/auth.guard';
       { path: 'home', component: AppComponent },
       {
         path: 'products', canActivate: [AuthGuard],
-        loadChildren: './products/products.module#ProductsModule'
+        loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
