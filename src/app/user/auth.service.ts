@@ -11,7 +11,13 @@ export class AuthService {
   redirectUrl: string;
 
   get isLoggedIn(): boolean {
-    return !!this.currentUser;
+    const tempUser = sessionStorage.getItem('EcomUser');
+    if (tempUser) {
+      this.currentUser = JSON.parse(tempUser);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   constructor(private alertService: AlertService) { }
@@ -27,6 +33,7 @@ export class AuthService {
         userName,
         isAdmin: true
       };
+      sessionStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
       this.alertService.addAlert('Admin user Logged in');
       return;
     }
@@ -35,11 +42,13 @@ export class AuthService {
       userName,
       isAdmin: false
     };
+    sessionStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
     this.alertService.addAlert(`User ${this.currentUser.userName} logged in`);
     return;
   }
 
   logout(): void {
     this.currentUser = null;
+    sessionStorage.removeItem('EcomUser');
   }
 }
