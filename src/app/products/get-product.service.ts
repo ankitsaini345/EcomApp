@@ -8,7 +8,9 @@ import { tap, map, catchError } from 'rxjs/operators';
 })
 export class GetProductService {
   // private url = 'assets/products/products.json';
-  private baseUrl = 'api/products';
+  // private baseUrl = 'api/products';
+  private baseUrl = 'http://localhost:8080/products';
+
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<IProduct[]> {
@@ -31,7 +33,7 @@ export class GetProductService {
       );
     // return this.getProducts()
     // .pipe(
-    //   map((products: IProduct[]) => products.find(p => p.id === id))  //used in case of json file
+    //   map((products: IProduct[]) => products.find(p => p.id === id))  //use in case of json file
     // );
   }
 

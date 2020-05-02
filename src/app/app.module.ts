@@ -4,19 +4,22 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { UserModule } from './user/user.module';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './shared/auth.guard';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { AuthService } from './user/auth.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: 'home', component: AppComponent },
+      { path: 'home', component: WelcomeComponent },
       {
         path: 'products', canActivate: [AuthGuard],
         loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)
@@ -26,7 +29,9 @@ import { AuthGuard } from './shared/auth.guard';
     ]),
     UserModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

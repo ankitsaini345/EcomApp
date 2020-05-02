@@ -56,7 +56,7 @@
             </span>
 					<span *ngIf="passwordVar.errors?.minlength">
               The Password must be longer than 5 characters.
-            </span>
+            </span>            
 					</span>
 				</div>
 			</div>
@@ -70,8 +70,13 @@
             Login
           </button>
         </div>
+        <div *ngIf="errorMessage" style="color: red; text-decoration: solid;">
+          <br>
+          {{errorMessage}}</div>
+            
       </div>
-		</form>
+    </form>
+
 	</div>
 </div>
 

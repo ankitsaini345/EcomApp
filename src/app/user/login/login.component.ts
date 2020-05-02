@@ -13,12 +13,15 @@ export class LoginComponent implements OnInit {
     email: '',
     pass: ''
   };
+  errorMessage: string;
   constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.errorMessage = '';
+  }
 
-  save(loginForm: NgForm) {
-    this.authService.login(loginForm.form.value.email, loginForm.form.value.password);
+  async save(loginForm: NgForm) {
+    await this.authService.loginWithHttpBasic(loginForm.form.value.email, loginForm.form.value.password);
     if (this.authService.isLoggedIn) {
       const url = this.authService.redirectUrl;
       this.authService.redirectUrl = '';
@@ -27,6 +30,9 @@ export class LoginComponent implements OnInit {
       } else {
         this.router.navigate(['/products']);
       }
+    } else {
+      this.errorMessage = this.authService.errorMessage;
     }
+
   }
 }

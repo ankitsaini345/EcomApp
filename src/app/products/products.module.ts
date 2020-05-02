@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { ProductData } from './product-data';
 
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductListComponent } from './product-list/product-list.component';
@@ -14,14 +12,12 @@ import { ProductResolverService } from './product-resolver.service';
 import { ProductListResolverService } from './product-list/product-list-resolver.service';
 import { ProductEditInfoComponent } from './product-edit-info/product-edit-info.component';
 import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.component';
-import { AuthGuard } from '../shared/auth.guard';
 
 @NgModule({
   declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent],
   imports: [
     CommonModule,
     SharedModule,
-    InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
       {
             path: '', component: ProductListComponent,

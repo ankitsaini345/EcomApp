@@ -15,7 +15,7 @@ import { ProductData } from '../products/product-data';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    InMemoryWebApiModule.forRoot(ProductData),
+
     RouterModule.forChild([
       {path: 'alert', component: AlertComponent, outlet: 'popup'}
     ])

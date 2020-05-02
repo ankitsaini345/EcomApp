@@ -17,9 +17,9 @@ export class AppComponent {
   get isLoggedIn() {
     return this.authService.isLoggedIn;
   }
-  get userName() {
+  get username() {
     if (this.authService.currentUser) {
-      return this.authService.currentUser.userName;
+      return this.authService.currentUser.username;
     }
     return '';
   }
