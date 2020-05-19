@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,11 @@ export class LoginComponent implements OnInit {
   }
 
   async save(loginForm: NgForm) {
-    await this.authService.loginWithHttpBasic(loginForm.form.value.email, loginForm.form.value.password);
+    if (environment.inMem) {
+      await this.authService.login(loginForm.form.value.email, loginForm.form.value.password);
+    } else {
+      await this.authService.loginWithHttpBasic(loginForm.form.value.email, loginForm.form.value.password);
+    }
     if (this.authService.isLoggedIn) {
       const url = this.authService.redirectUrl;
       this.authService.redirectUrl = '';

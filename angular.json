@@ -66,6 +66,22 @@
                   "maximumWarning": "6kb"
                 }
               ]
+            },
+            "restService": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.rest.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
             }
           }
         },
@@ -77,6 +93,9 @@
           "configurations": {
             "production": {
               "browserTarget": "EcomApp:build:production"
+            },
+            "restService": {
+              "browserTarget": "EcomApp:build:restService"
             }
           }
         },

@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { IProduct } from './product';
 import { tap, map, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class GetProductService {
   // private url = 'assets/products/products.json';
   // private baseUrl = 'api/products';
-  private baseUrl = 'http://localhost:8080/products';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -26,15 +27,18 @@ export class GetProductService {
       return of(this.initializeProduct());
     }
     const url = `${this.baseUrl}/${id}`;
-    return this.http.get<IProduct>(url)
-      .pipe(
-        // tap(data => console.log('getProduct ' + JSON.stringify(data))),
-        catchError(this.handleError)
-      );
-    // return this.getProducts()
-    // .pipe(
-    //   map((products: IProduct[]) => products.find(p => p.id === id))  //use in case of json file
-    // );
+    if (!environment.inMem) {
+      return this.http.get<IProduct>(url)
+        .pipe(
+          // tap(data => console.log('getProduct ' + JSON.stringify(data))),
+          catchError(this.handleError)
+        );
+    } else {
+      return this.getProducts()
+        .pipe(
+          map((products: IProduct[]) => products.find(p => p.id === id))  //use in case of json file
+        );
+    }
   }
 
   updateProduct(product: IProduct): Observable<IProduct> {

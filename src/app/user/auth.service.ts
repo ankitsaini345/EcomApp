@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 import { AlertService } from '../shared/alert/alert.service';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AuthService implements HttpInterceptor {
   constructor(
     private alertService: AlertService,
     private http: HttpClient) {
-      this.errorMessage = '';
+    this.errorMessage = '';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -34,42 +35,34 @@ export class AuthService implements HttpInterceptor {
         Authorization: localStorage.getItem('token')
       }
     });
-    return next.handle(modifiedRequest);
+    if (environment.inMem) {
+      return next.handle(req);
+    } else {
+      return next.handle(modifiedRequest);
+    }
+
   }
-
-
-  // loginWithJWT(username: string, password: string): void {
-  //   if (!username || !password) {
-  //     this.alertService.addAlert('Username/Password is Missing..');
-  //     return;
-  //   }
-  //   const data = this.http.post(this.AUTH_URL, { username, password }).toPromise();
-  //   this.currentUser = {
-  //     id: 1,
-  //     username,
-  //     isAdmin: true
-  //   };
-  //   localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
-  //   localStorage.setItem('jwt', JSON.stringify(data));
-  //   return;
-  // }
 
   async loginWithHttpBasic(username: string, password: string) {
     if (!username || !password) {
       this.alertService.addAlert('Username/Password is Missing..');
     }
     localStorage.setItem('token', 'Basic ' + btoa(username + ':' + password));
-    const data = await this.http.get('http://localhost:8080/testLogin', {responseType: 'text'}).toPromise();
-    if (data === 'success') {
-    this.currentUser = {
-      id: 1,
-      username,
-      isAdmin: true
-    };
-    localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
-  } else {
-    this.errorMessage = 'Invalid Credentials';
-  }
+    try {
+      const data = await this.http.get(environment.loginUrl, { responseType: 'text' }).toPromise();
+      if (data) {
+        this.currentUser = {
+          id: 1,
+          username,
+          isAdmin: true
+        };
+        localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
+      }
+    } catch (error) {
+      console.log(error.message);
+      this.errorMessage = 'Invalid Credentials';
+    }
+
   }
 
   logout(): void {
@@ -78,29 +71,29 @@ export class AuthService implements HttpInterceptor {
     localStorage.removeItem('EcomUser');
   }
 
-  // login(username: string, password: string): void {
-  //   if (!username || !password) {
-  //     this.alertService.addAlert('Username/Password is Missing..');
-  //     return;
-  //   }
-  //   if (username === 'admin') {
-  //     this.currentUser = {
-  //       id: 1,
-  //       username,
-  //       isAdmin: true
-  //     };
-  //     localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
-  //     this.alertService.addAlert('Admin user Logged in');
-  //     return;
-  //   }
-  //   this.currentUser = {
-  //     id: 2,
-  //     username,
-  //     isAdmin: false
-  //   };
-  //   localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
-  //   this.alertService.addAlert(`User ${this.currentUser.username} logged in`);
-  //   return;
-  // }
+  login(username: string, password: string): void {
+    if (!username || !password) {
+      this.alertService.addAlert('Username/Password is Missing..');
+      return;
+    }
+    if (username === 'admin') {
+      this.currentUser = {
+        id: 1,
+        username,
+        isAdmin: true
+      };
+      localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
+      this.alertService.addAlert('Admin user Logged in');
+      return;
+    }
+    this.currentUser = {
+      id: 2,
+      username,
+      isAdmin: false
+    };
+    localStorage.setItem('EcomUser', JSON.stringify(this.currentUser));
+    this.alertService.addAlert(`User ${this.currentUser.username} logged in`);
+    return;
+  }
 }
 
