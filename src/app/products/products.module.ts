@@ -12,9 +12,10 @@ import { ProductResolverService } from './product-resolver.service';
 import { ProductListResolverService } from './product-list/product-list-resolver.service';
 import { ProductEditInfoComponent } from './product-edit-info/product-edit-info.component';
 import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.component';
+import { ProductCartComponent } from './product-cart/product-cart.component';
 
 @NgModule({
-  declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent],
+  declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent, ProductCartComponent],
   imports: [
     CommonModule,
     SharedModule,
