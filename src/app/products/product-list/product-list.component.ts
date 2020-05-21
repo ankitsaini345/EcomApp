@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IProduct } from '../product';
 import { GetProductService } from '../get-product.service';
 import { ActivatedRoute } from '@angular/router';
+import { ProductCartService } from '../product-cart.service';
 
 
 @Component({
@@ -25,7 +26,11 @@ export class ProductListComponent implements OnInit {
     this.filteredProduct = this._filterBy ? this.performFilter(this._filterBy) : this.products;
   }
 
-  constructor(private productService: GetProductService, private route: ActivatedRoute) { }
+  constructor(
+    private productService: GetProductService,
+    private route: ActivatedRoute,
+    private cartService: ProductCartService
+    ) { }
 
   ngOnInit() {
     // this.productService.getProducts().subscribe(data => {
@@ -43,5 +48,8 @@ export class ProductListComponent implements OnInit {
     return this.products.filter((product: IProduct) =>
       product.productName.toLocaleLowerCase().indexOf(val) !== -1);
   }
-
+  addToCart(id: number): void {
+    const msg = this.cartService.addToCart(id);
+    console.log(msg);
+    }
 }

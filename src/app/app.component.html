@@ -34,6 +34,11 @@
 			<li class="nav-item" *ngIf="isLoggedIn">
 				<a class="nav-link" (click)="logOut()">Log Out</a>
 			</li>
+			<li class="nav-item" *ngIf="isLoggedIn">
+				<a [routerLink]="['/cart']"> <i class="fa fa-shopping-cart fa-2x fa-border" style="color: orange;"></i>
+				<span class="badge"style="color: orange;">100</span> </a>
+			</li>
+
 		</ul>
 	</nav>
 	<br><br><br><br>

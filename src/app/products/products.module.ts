@@ -14,8 +14,10 @@ import { ProductEditInfoComponent } from './product-edit-info/product-edit-info.
 import { ProductEditTagComponent } from './product-edit-tag/product-edit-tag.component';
 import { ProductCartComponent } from './product-cart/product-cart.component';
 
+
 @NgModule({
-  declarations: [ProductDetailComponent, ProductListComponent, ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent, ProductCartComponent],
+  declarations: [ProductDetailComponent, ProductListComponent,
+     ProductEditComponent, ProductEditInfoComponent, ProductEditTagComponent, ProductCartComponent],
   imports: [
     CommonModule,
     SharedModule,

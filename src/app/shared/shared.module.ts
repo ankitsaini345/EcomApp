@@ -8,6 +8,8 @@ import { AlertComponent } from './alert/alert.component';
 import { RouterModule } from '@angular/router';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ProductData } from '../products/product-data';
+import { AuthGuard } from './auth.guard';
+import { ProductCartComponent } from '../products/product-cart/product-cart.component';
 
 @NgModule({
   declarations: [StarComponent, AlertComponent],
@@ -17,7 +19,11 @@ import { ProductData } from '../products/product-data';
     ReactiveFormsModule,
 
     RouterModule.forChild([
-      {path: 'alert', component: AlertComponent, outlet: 'popup'}
+      {path: 'alert', component: AlertComponent, outlet: 'popup'},
+      {
+        path: 'cart', canActivate: [AuthGuard],
+        component: ProductCartComponent
+      },
     ])
   ],
   exports: [
